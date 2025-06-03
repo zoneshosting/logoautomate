@@ -1,9 +1,12 @@
 name: MLB EPG Logo Automation
 
 on:
-  # Run daily at 6 AM UTC (1 AM EST, 2 AM EDT)
+  # Run daily at 8 AM EST/EDT (New York time)
+  # During EST (winter): 8 AM EST = 1 PM UTC
+  # During EDT (summer): 8 AM EDT = 12 PM UTC
+  # Using 12 PM UTC for EDT (current)
   schedule:
-    - cron: '0 6 * * *'
+    - cron: '0 12 * * *'
   
   # Allow manual triggering from GitHub interface
   workflow_dispatch:
