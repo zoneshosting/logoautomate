@@ -17,9 +17,9 @@ This project automatically fetches EPG (Electronic Program Guide) data and filte
    git push -u origin main
    ```
 
-### 2. Configure Secrets (Recommended)
+### 2. Configure Secrets
 
-For security, set up GitHub Secrets instead of hardcoding credentials:
+For security, set up GitHub Secrets:
 
 1. Go to your repository on GitHub
 2. Click **Settings** → **Secrets and variables** → **Actions**
@@ -27,7 +27,20 @@ For security, set up GitHub Secrets instead of hardcoding credentials:
    - Name: `EPG_USERNAME`, Value: `eRuTKFCeSV`
    - Name: `EPG_PASSWORD`, Value: `TUNXVoqzez`
 
-### 3. How It Works
+### 3. Optional: Telegram Notifications 📱
+
+Get instant notifications with MLB data sent to your Telegram!
+
+**Quick Setup:**
+1. Create a Telegram bot with @BotFather
+2. Get your chat ID
+3. Add two more secrets:
+   - `TELEGRAM_BOT_TOKEN`: Your bot token
+   - `TELEGRAM_CHAT_ID`: Your chat ID
+
+**📋 Detailed guide:** See [TELEGRAM_SETUP.md](TELEGRAM_SETUP.md)
+
+### 4. How It Works
 
 The GitHub Action will:
 - **Run daily at 6 AM UTC** (1 AM EST/2 AM EDT)
