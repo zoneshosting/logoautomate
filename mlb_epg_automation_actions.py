@@ -104,33 +104,39 @@ def main():
     USERNAME = os.getenv('EPG_USERNAME', 'eRuTKFCeSV')  # Fallback to hardcoded
     PASSWORD = os.getenv('EPG_PASSWORD', 'TUNXVoqzez')  # Fallback to hardcoded
     
-    # Create output file (single file for GitHub Actions)
-    output_file = "mlb_epg_current.txt"
+    # Create MLB directory if it doesn't exist
+    mlb_dir = "MLB"
+    if not os.path.exists(mlb_dir):
+        os.makedirs(mlb_dir)
+        print(f"Created directory: {mlb_dir}")
+    
+    # Create timestamped filename with MM-DD-YYYY format
+    timestamp = datetime.now().strftime("%m-%d-%Y")
+    current_file = os.path.join(mlb_dir, "mlb_epg_current.txt")
+    timestamped_file = os.path.join(mlb_dir, f"{timestamp}_mlb_epg_filtered.txt")
     
     print("=" * 50)
     print("MLB EPG Data Automation")
     print("=" * 50)
     print(f"Timestamp: {datetime.now()}")
     print(f"Running in: {'GitHub Actions' if os.getenv('GITHUB_ACTIONS') else 'Local'}")
+    print(f"Output directory: {mlb_dir}/")
     
     # Run the automation
-    success = fetch_and_filter_mlb_data(USERNAME, PASSWORD, output_file)
+    success = fetch_and_filter_mlb_data(USERNAME, PASSWORD, current_file)
     
     if success:
         print("\n✅ Automation completed successfully!")
-        # Create a timestamped backup as well
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        backup_file = f"mlb_epg_filtered_{timestamp}.txt"
         
-        # Copy current to timestamped backup
+        # Create timestamped backup
         try:
-            with open(output_file, 'r', encoding='utf-8') as f:
+            with open(current_file, 'r', encoding='utf-8') as f:
                 content = f.read()
-            with open(backup_file, 'w', encoding='utf-8') as f:
+            with open(timestamped_file, 'w', encoding='utf-8') as f:
                 f.write(content)
-            print(f"Backup saved to: {backup_file}")
+            print(f"Timestamped backup saved to: {timestamped_file}")
         except Exception as e:
-            print(f"Warning: Could not create backup: {e}")
+            print(f"Warning: Could not create timestamped backup: {e}")
             
         sys.exit(0)
     else:

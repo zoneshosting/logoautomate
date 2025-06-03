@@ -42,26 +42,23 @@ jobs:
     - name: Check output and show results
       run: |
         echo "=== Current MLB EPG Results ==="
-        if [ -f "mlb_epg_current.txt" ]; then
-          echo "Found $(wc -l < mlb_epg_current.txt) MLB channels:"
-          cat mlb_epg_current.txt
+        if [ -f "MLB/mlb_epg_current.txt" ]; then
+          echo "Found $(wc -l < MLB/mlb_epg_current.txt) MLB channels:"
+          cat MLB/mlb_epg_current.txt
         else
           echo "No current output file found"
         fi
         
-        echo -e "\n=== All output files ==="
-        ls -la mlb_epg_*.txt || echo "No output files found"
+        echo -e "\n=== All MLB files ==="
+        ls -la MLB/ || echo "No MLB directory found"
         
     - name: Commit and push results
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "GitHub Actions Bot"
         
-        # Force add the current file (even if in gitignore)
-        git add -f mlb_epg_current.txt
-        
-        # Add any timestamped files that aren't in gitignore
-        git add mlb_epg_filtered_*.txt 2>/dev/null || true
+        # Add the entire MLB directory
+        git add MLB/
         
         # Check if there are changes to commit
         if git diff --staged --quiet; then
@@ -72,10 +69,3 @@ jobs:
           git push
           echo "✅ Successfully pushed changes to repository"
         fi
-
-    - name: Upload artifacts (backup)
-      uses: actions/upload-artifact@v4
-      with:
-        name: mlb-epg-data-${{ github.run_number }}
-        path: mlb_epg_*.txt
-        retention-days: 30

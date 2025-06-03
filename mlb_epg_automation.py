@@ -109,14 +109,21 @@ def main():
     USERNAME = "eRuTKFCeSV"
     PASSWORD = "TUNXVoqzez"
     
-    # Create timestamped output file
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_file = f"mlb_epg_filtered_{timestamp}.txt"
+    # Create MLB directory if it doesn't exist
+    mlb_dir = "MLB"
+    if not os.path.exists(mlb_dir):
+        os.makedirs(mlb_dir)
+        print(f"Created directory: {mlb_dir}")
+    
+    # Create timestamped filename with MM-DD-YYYY format
+    timestamp = datetime.now().strftime("%m-%d-%Y")
+    output_file = os.path.join(mlb_dir, f"{timestamp}_mlb_epg_filtered.txt")
     
     print("=" * 50)
     print("MLB EPG Data Automation")
     print("=" * 50)
     print(f"Timestamp: {datetime.now()}")
+    print(f"Output directory: {mlb_dir}/")
     
     # Run the automation
     success = fetch_and_filter_mlb_data(USERNAME, PASSWORD, output_file)
