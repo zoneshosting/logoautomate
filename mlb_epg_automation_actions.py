@@ -165,10 +165,11 @@ def main():
         os.makedirs(mlb_dir)
         print(f"Created directory: {mlb_dir}")
     
-    # Create timestamped filename with MM-DD-YYYY format
-    timestamp = datetime.now().strftime("%m-%d-%Y")
+    # Create unique timestamped filename with MM-DD-YYYY_HHMM format
+    timestamp_date = datetime.now().strftime("%m-%d-%Y")
+    timestamp_time = datetime.now().strftime("%H%M")
     current_file = os.path.join(mlb_dir, "mlb_epg_current.txt")
-    timestamped_file = os.path.join(mlb_dir, f"{timestamp}_mlb_epg_filtered.txt")
+    timestamped_file = os.path.join(mlb_dir, f"{timestamp_date}_{timestamp_time}_mlb_epg_filtered.txt")
     
     print("=" * 50)
     print("MLB EPG Data Automation")
@@ -177,14 +178,16 @@ def main():
     print(f"Running in: {'GitHub Actions' if os.getenv('GITHUB_ACTIONS') else 'Local'}")
     print(f"Output directory: {mlb_dir}/")
     print(f"Telegram enabled: {'Yes' if BOT_TOKEN and CHAT_ID else 'No'}")
+    print(f"Current file: {current_file}")
+    print(f"Timestamped file: {timestamped_file}")
     
-    # Run the automation
+    # Run the automation for the current file
     success = fetch_and_filter_mlb_data(USERNAME, PASSWORD, current_file)
     
     if success:
         print("\n✅ Automation completed successfully!")
         
-        # Create timestamped backup
+        # Create timestamped backup with unique filename
         try:
             with open(current_file, 'r', encoding='utf-8') as f:
                 content = f.read()
@@ -220,7 +223,8 @@ def main():
 📅 <b>Date:</b> {datetime.now().strftime('%B %d, %Y at %I:%M %p UTC')}
 📺 <b>Channels Found:</b> {mlb_count} MLB channels
 ✅ <b>Status:</b> Successfully updated
-📄 <b>Current file:</b> MLB/mlb_epg_current.txt"""
+📄 <b>Current file:</b> MLB/mlb_epg_current.txt
+🗃️ <b>Timestamped file:</b> MLB/{timestamp_date}_{timestamp_time}_mlb_epg_filtered.txt"""
                 
                 # Send header message first
                 header_success = send_to_telegram(BOT_TOKEN, CHAT_ID, header_message)
