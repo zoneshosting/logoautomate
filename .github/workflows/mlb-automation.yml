@@ -38,6 +38,8 @@ jobs:
       env:
         EPG_USERNAME: ${{ secrets.EPG_USERNAME }}
         EPG_PASSWORD: ${{ secrets.EPG_PASSWORD }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         
     - name: Check output and show results
       run: |
