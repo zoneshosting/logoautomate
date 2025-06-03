@@ -54,8 +54,11 @@ jobs:
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "GitHub Actions Bot"
         
-        # Add any new or changed output files
-        git add mlb_epg_*.txt
+        # Force add the current file (even if in gitignore)
+        git add -f mlb_epg_current.txt
+        
+        # Add any timestamped files that aren't in gitignore
+        git add mlb_epg_filtered_*.txt 2>/dev/null || true
         
         # Check if there are changes to commit
         if git diff --staged --quiet; then
